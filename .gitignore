@@ -1,4 +1,3 @@
 *.o*
-gnuplot/*-data
+gnuplot/*-data*
 gnuplot/*-plot
-gnuplot/*-plot.png
