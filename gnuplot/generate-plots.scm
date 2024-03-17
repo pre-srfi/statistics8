@@ -10,7 +10,7 @@
 
 (define (plot-point x y) (echo x " " y))
 
-(define (plot-function interval step name f)
+(define (plot-function xmin xmax step name f)
   (with-output-to-file (string-append name "-plot")
     (lambda ()
       (for-each echo prelude)
@@ -18,19 +18,19 @@
       (echo "plot '" name "-data' w p ls 1")))
   (with-output-to-file (string-append name "-data")
     (lambda ()
-      (let loop ((x (- interval)))
-        (when (<= x interval)
+      (let loop ((x (inexact xmin)))
+        (when (<= x xmax)
           (plot-point x (f x))
           (loop (+ x step)))))))
 
 (define normal-cdf ndtr)
 
 (define (student-cdf v)
-  (define (sign t) (if (negative? t) -1 1))
   (lambda (t)
-    (let ((x (/ v (+ v (square t)))))
-      (+ 0.5 (* 0.5 (sign t) (- (incbet (* 0.5 v) 0.5 1.0)
-                                (incbet (* 0.5 v) 0.5 x)))))))
+    (let ((x (/ v (+ v (square t))))
+          (h (if (negative? t) -0.5 0.5)))
+      (+ 0.5 (* h (- (incbet (* 0.5 v) 0.5 1.0)
+                     (incbet (* 0.5 v) 0.5 x)))))))
 
-(plot-function 5.0 0.25 "normal-cdf" normal-cdf)
-(plot-function 5.0 0.25 "student-cdf" (student-cdf 1.0))
+(plot-function -5 5 0.25 "normal-cdf" normal-cdf)
+(plot-function -5 5 0.25 "student-cdf" (student-cdf 1.0))
