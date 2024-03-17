@@ -32,5 +32,9 @@
       (+ 0.5 (* h (- (incbet (* 0.5 v) 0.5 1.0)
                      (incbet (* 0.5 v) 0.5 x)))))))
 
+(define (chi-squared-cdf k)
+  (lambda (x) (igam (* 0.5 k) (* 0.5 x))))
+
+(plot-function 0 8 0.25 "chi-squared-cdf" (chi-squared-cdf 2.0))
 (plot-function -5 5 0.25 "normal-cdf" normal-cdf)
 (plot-function -5 5 0.25 "student-cdf" (student-cdf 1.0))
